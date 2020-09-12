@@ -1,0 +1,11 @@
+{
+    "name": "nodejudge",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "node index.js"
+    },
+    "author": "GameBox-X",
+    "license": "MIT"
+}

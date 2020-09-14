@@ -71,12 +71,14 @@ module.exports = function(args,options = {CB:true,CF:true},pre_comm,mode=0){
         if(el.startsWith("--")||el.startsWith("-")){
             if(el.indexOf("=")>=0) {
                 mode >= 4 && console.debug(`Prop with =. Continuing...`)
-                var elm = el.split("=",1);
+                var elm = el.split("=");
+                elm[0]= (elm[0].startsWith("--"))? elm[0].substring(2):elm[0].substring(1);
+                elm[1]=utc(elm[1])
                 my_return.properties[elm[0]]=elm[1];
                 continue;
             }
             if(current_prop) my_return.keys[current_prop]=true;
-            current_prop = el;
+            current_prop = (el.startsWith("--"))? el.substring(2):el.substring(1);
             mode >= 4 && console.debug(`Prop or key. Continuing...`)
         }else{
             if(current_prop){
@@ -89,7 +91,33 @@ module.exports = function(args,options = {CB:true,CF:true},pre_comm,mode=0){
             }
         }
     }
+    mode >= 4 && console.debug(`Current prop ${current_prop}`)
     if(current_prop) my_return.keys[current_prop]=true;
     mode >= 4 && console.debug(`Exiting...`)
     return my_return;
+}
+
+/**
+ * 
+ * @param {string} elm element to convert
+ */
+function utc(elm){
+    var base_type = "string";
+    if(!isNaN(elm)){
+        nancheck: {
+            var e_checker = true;
+            for(var ch in elm){
+                if(elm[ch]=="."||(elm[ch]>="0"&&elm[ch]<='9')) continue;
+                else if(elm[ch]=='e'&&ch>0&&e_checker) { e_checker=false; continue;}
+                else if(elm[ch]=='-'&&elm[ch-1]=='e') continue;
+                else break nancheck; 
+            }
+            base_type = "number";
+        }
+    }
+    if(base_type==="string") return elm;
+    else{
+        if(elm.indexOf('e')>=1||elm.indexOf('.')>=0) return parseFloat(elm);
+        else return parseInt(elm);
+    }
 }

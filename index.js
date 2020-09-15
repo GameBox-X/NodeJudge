@@ -13,4 +13,3 @@ function advanced_require(req){
     return require(req)
 }
 //var fs = advanced_require('command_parser');
-console.log(advanced_require('command_parser')(process.argv))

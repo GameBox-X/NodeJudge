@@ -7,5 +7,8 @@
         "test": "node index.js"
     },
     "author": "GameBox-X",
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "process-list": "^2.0.0"
+    }
 }
